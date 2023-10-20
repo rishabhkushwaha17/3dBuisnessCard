@@ -25,7 +25,9 @@ export default class Fox
 console.log(this.resource);
         this.setModel()
         this.setLinks();
-        this.setSocialLinks();
+        this.setSocialLinks(new THREE.Vector3(10,0,0.1),"insta");
+        this.setSocialLinks(new THREE.Vector3(10,4,0.1),"fb");
+        this.setSocialLinks(new THREE.Vector3(10,-4,0.1),"x");
         this.experience.canvas.addEventListener("click", (e) => this.onMouseClick(e));
         this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
@@ -60,11 +62,12 @@ setLinks(){
     mesh.position.set(0,0,0.1)
     this.scene.add(mesh);
 }
-setSocialLinks=()=>{
+setSocialLinks=(position,name)=>{
     let geometry=new RoundedBoxGeometry(2,2,.1,100,1);
     let material=new THREE.MeshBasicMaterial()
     let mesh=new THREE.Mesh(geometry,material);
-    mesh.position.set(10,0,0.1)
+    mesh.position.set(position.x,position.y,position.z)
+    mesh.name=name;
     this.touchableObjects.push(mesh)
     this.scene.add(mesh);
 }
@@ -81,9 +84,24 @@ onMouseClick(event) {
 
     if (intersects.length > 0) {
         // Mesh was clicked
-        window.location.href = "https://www.instagram.com/"
+        this.open(intersects)
+    
+    }
         // this.interactiveMesh.material.color.set(0xff0000); // Change the color or perform any action
     }
+
+open(intersects){
+    switch(intersects[0].object.name){
+        case "insta":
+    window.location.href = "https://www.instagram.com/"
+break;
+case "fb":
+    window.location.href = "https://www.fb.com/"
+break;
+case "x":
+    window.location.href = "https://www.x.com/"
+break;
+}
 }
     setAnimation()
     {
